@@ -1,0 +1,17 @@
+{
+  "name": "gestion_stock",
+  "version": "1.0.0",
+  "description": "Projet 10: Gestion de Stock / Inventaire (Magasiner)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "method-override": "^3.0.0"
+  }
+}

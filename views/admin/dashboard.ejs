@@ -1,0 +1,96 @@
+<%- include('../header', { title: 'Dashboard Admin' }) %>
+
+<h2>Tableau de Bord Administrateur</h2>
+
+<div class="card mt-4">
+    <h3>Créer un nouveau Magasinier</h3>
+    <form action="/admin/users" method="POST" style="display: flex; gap: 15px; align-items: flex-end;">
+        <div class="form-group" style="margin: 0; flex: 1;">
+            <label>Nom d'utilisateur</label>
+            <input type="text" name="username" required>
+        </div>
+        <div class="form-group" style="margin: 0; flex: 1;">
+            <label>Mot de passe</label>
+            <input type="password" name="password" required>
+        </div>
+        <div class="form-group" style="margin: 0; flex: 1;">
+            <label>Taux Horaire</label>
+            <input type="number" name="tauxHoraire" value="15" step="0.5" required>
+        </div>
+        <button type="submit" class="btn">Créer</button>
+    </form>
+</div>
+
+<div class="card mt-4">
+    <h3>Liste des Magasiniers</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom d'utilisateur</th>
+                <th>Taux Horaire</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(function(u) { %>
+                <tr>
+                    <td><%= u.id %></td>
+                    <td><%= u.username %></td>
+                    <td><%= u.tauxHoraire %> Dhs/h</td>
+                    <td>
+                        <form action="/admin/users/<%= u.id %>?_method=DELETE" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+            <% if (users.length === 0) { %>
+                <tr><td colspan="4" class="text-center">Aucun magasinier</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<div class="card mt-4">
+    <h3>Toutes les Sessions</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Magasinier</th>
+                <th>Date</th>
+                <th>Nb Articles</th>
+                <th>Quota (H)</th>
+                <th>Temps Passé (H)</th>
+                <th>Salaire</th>
+                <th>Statut / Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% sessions.forEach(function(s) { %>
+                <tr>
+                    <td><%= s.username %></td>
+                    <td><%= new Date(s.date).toLocaleString() %></td>
+                    <td><%= s.nbArticles %></td>
+                    <td><%= s.Quota %></td>
+                    <td><%= s.tempsPasse %></td>
+                    <td><%= s.salaire.toFixed(2) %> Dhs</td>
+                    <td>
+                        <% if (s.erreur) { %>
+                            <span class="badge badge-danger">Erreur (Malus)</span>
+                        <% } else { %>
+                            <form action="/admin/sessions/<%= s.id %>/erreur?_method=PUT" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-warning">Signaler Erreur</button>
+                            </form>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }); %>
+            <% if (sessions.length === 0) { %>
+                <tr><td colspan="7" class="text-center">Aucune session enregistrée</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../footer') %>

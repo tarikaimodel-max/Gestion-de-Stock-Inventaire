@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Stock - <%= typeof title !== 'undefined' ? title : '' %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <% if (typeof userRole !== 'undefined' && userRole) { %>
+    <nav>
+        <div>
+            <strong>Gestion Stock</strong>
+        </div>
+        <div>
+            <span style="margin-right: 20px;">Bienvenue, <%= username %> (<%= userRole %>)</span>
+            <a href="/auth/logout">Déconnexion</a>
+        </div>
+    </nav>
+    <% } %>
+
+    <div class="container">
+        <%- body %>
+    </div>
+
+</body>
+</html>

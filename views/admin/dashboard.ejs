@@ -7,15 +7,15 @@
     <form action="/admin/users" method="POST" novalidate style="display: flex; gap: 15px; align-items: flex-end;">
         <div class="form-group" style="margin: 0; flex: 1;">
             <label>Nom d'utilisateur</label>
-            <input type="text" name="username" required>
+            <input type="text" name="username">
         </div>
         <div class="form-group" style="margin: 0; flex: 1;">
             <label>Mot de passe</label>
-            <input type="password" name="password" required>
+            <input type="password" name="password">
         </div>
         <div class="form-group" style="margin: 0; flex: 1;">
             <label>Taux Horaire</label>
-            <input type="number" name="tauxHoraire" value="15" step="0.5" required>
+            <input type="number" name="tauxHoraire" value="15" step="0.5">
         </div>
         <button type="submit" class="btn">Créer</button>
     </form>
@@ -39,7 +39,7 @@
                     <td><%= u.username %></td>
                     <td><%= u.tauxHoraire %> Dhs/h</td>
                     <td>
-                        <button type="button" class="btn btn-warning" onclick="openEditModal('<%= u.id %>', '<%= u.username %>', '<%= u.tauxHoraire %>')">Modifier</button>
+                        <button type="button" class="btn" onclick="openEditModal('<%= u.id %>', '<%= u.username %>', '<%= u.tauxHoraire %>')">Modifier</button>
                         <form action="/admin/users/<%= u.id %>?_method=DELETE" method="POST" style="display:inline;" novalidate>
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</button>
                         </form>
@@ -100,7 +100,7 @@
         <form id="editForm" method="POST" novalidate>
             <div class="form-group">
                 <label>Nom d'utilisateur</label>
-                <input type="text" name="username" id="editUsername" required>
+                <input type="text" name="username" id="editUsername">
             </div>
             <div class="form-group">
                 <label>Nouveau Mot de passe (optionnel)</label>
@@ -108,7 +108,7 @@
             </div>
             <div class="form-group">
                 <label>Taux Horaire</label>
-                <input type="number" name="tauxHoraire" id="editTauxHoraire" step="0.5" required>
+                <input type="number" name="tauxHoraire" id="editTauxHoraire" step="0.5">
             </div>
             <div style="display:flex; justify-content:space-between; margin-top:15px;">
                 <button type="submit" class="btn">Enregistrer</button>

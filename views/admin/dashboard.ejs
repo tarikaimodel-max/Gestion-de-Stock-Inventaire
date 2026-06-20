@@ -4,7 +4,7 @@
 
 <div class="card mt-4">
     <h3>Créer un nouveau Magasinier</h3>
-    <form action="/admin/users" method="POST" style="display: flex; gap: 15px; align-items: flex-end;">
+    <form action="/admin/users" method="POST" novalidate style="display: flex; gap: 15px; align-items: flex-end;">
         <div class="form-group" style="margin: 0; flex: 1;">
             <label>Nom d'utilisateur</label>
             <input type="text" name="username" required>
@@ -39,7 +39,8 @@
                     <td><%= u.username %></td>
                     <td><%= u.tauxHoraire %> Dhs/h</td>
                     <td>
-                        <form action="/admin/users/<%= u.id %>?_method=DELETE" method="POST" style="display:inline;">
+                        <button type="button" class="btn btn-warning" onclick="openEditModal('<%= u.id %>', '<%= u.username %>', '<%= u.tauxHoraire %>')">Modifier</button>
+                        <form action="/admin/users/<%= u.id %>?_method=DELETE" method="POST" style="display:inline;" novalidate>
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</button>
                         </form>
                     </td>
@@ -79,7 +80,7 @@
                         <% if (s.erreur) { %>
                             <span class="badge badge-danger">Erreur (Malus)</span>
                         <% } else { %>
-                            <form action="/admin/sessions/<%= s.id %>/erreur?_method=PUT" method="POST" style="display:inline;">
+                            <form action="/admin/sessions/<%= s.id %>/erreur?_method=PUT" method="POST" style="display:inline;" novalidate>
                                 <button type="submit" class="btn btn-warning">Signaler Erreur</button>
                             </form>
                         <% } %>
@@ -92,5 +93,47 @@
         </tbody>
     </table>
 </div>
+
+<div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index: 1000;">
+    <div class="card" style="background:white; padding:20px; width:400px; max-width:90%;">
+        <h3>Modifier le Magasinier</h3>
+        <form id="editForm" method="POST" novalidate>
+            <div class="form-group">
+                <label>Nom d'utilisateur</label>
+                <input type="text" name="username" id="editUsername" required>
+            </div>
+            <div class="form-group">
+                <label>Nouveau Mot de passe (optionnel)</label>
+                <input type="password" name="password" id="editPassword">
+            </div>
+            <div class="form-group">
+                <label>Taux Horaire</label>
+                <input type="number" name="tauxHoraire" id="editTauxHoraire" step="0.5" required>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:15px;">
+                <button type="submit" class="btn">Enregistrer</button>
+                <button type="button" class="btn btn-danger" onclick="closeEditModal()">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openEditModal(id, username, tauxHoraire) {
+    document.getElementById('editForm').action = '/admin/users/' + id + '?_method=PUT';
+    document.getElementById('editUsername').value = username;
+    document.getElementById('editTauxHoraire').value = tauxHoraire;
+    document.getElementById('editPassword').value = '';
+    document.getElementById('editModal').style.display = 'flex';
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+    
+    // Nettoyer les erreurs dynamiques à la fermeture
+    document.getElementById('editForm').querySelectorAll('.dynamic-error').forEach(el => el.remove());
+    document.getElementById('editForm').querySelectorAll('input').forEach(input => input.style.borderColor = '');
+}
+</script>
 
 <%- include('../footer') %>

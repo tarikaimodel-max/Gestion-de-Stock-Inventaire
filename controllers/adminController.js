@@ -77,6 +77,29 @@ exports.createUser = async (req, res) => {
     }
 };
 
+exports.updateUser = async (req, res) => {
+    const userId = req.params.id;
+    const { username, password, tauxHoraire } = req.body;
+    try {
+        let users = await db.getUsers();
+        const userIndex = users.findIndex(u => u.id === userId);
+        
+        if (userIndex !== -1) {
+            users[userIndex].username = username;
+            users[userIndex].tauxHoraire = parseFloat(tauxHoraire) || 15;
+            
+            if (password && password.trim() !== '') {
+                users[userIndex].password = await bcrypt.hash(password, 10);
+            }
+            
+            await db.saveUsers(users);
+        }
+        res.redirect('/admin/dashboard');
+    } catch (error) {
+        res.status(500).send("Erreur lors de la modification de l'utilisateur");
+    }
+};
+
 exports.deleteUser = async (req, res) => {
     const userId = req.params.id;
     try {
